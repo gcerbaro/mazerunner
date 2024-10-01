@@ -1,15 +1,17 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerGroundChecker : MonoBehaviour
 {
     [SerializeField] private PlayerInput _playerInput;
+    private IGameStatus _gameStatus;
 
     private void Start()
     {
         _playerInput.actions["ActionKey"].performed += ctx => ActionKey(true);
         _playerInput.actions["ActionKey"].canceled += ctx => ActionKey(false);
+
+        _gameStatus = ServiceLocator.GetService<IGameStatus>();
     }
 
     private void ActionKey(bool pressedKey)
@@ -19,19 +21,24 @@ public class PlayerGroundChecker : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        //Debug.Log($"OnTriggerEnter = {other.name}");
         if (other.CompareTag("Platform"))
         {
-            Debug.Log($"OnTriggerEnter = {other.name}");
             transform.parent.SetParent(other.transform);
+        } 
+        else if (other.CompareTag("Dead"))
+        {
+            Debug.Log("Dead");
+            _gameStatus.InvokePlayerDeadEvent();
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
+        //Debug.Log($"OnTriggerExit = {other.name}");
         if (other.CompareTag("Platform"))
         {
-            Debug.Log($"OnTriggerExit = {other.name}");
             transform.parent.SetParent(null);
         }
     }
-}
+} 
