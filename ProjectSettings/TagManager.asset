@@ -7,6 +7,7 @@ TagManager:
   - CinemachineTarget
   - Platform
   - Dead
+  - ActionArea
   layers:
   - Default
   - TransparentFX
