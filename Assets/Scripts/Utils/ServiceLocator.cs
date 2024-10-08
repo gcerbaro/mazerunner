@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public static class ServiceLocator
 {
     private static readonly Dictionary<Type, object> services = new Dictionary<Type, object>();
-
+    
     public static void RegisterService<T>(T service)
     {
         var type = typeof(T);
